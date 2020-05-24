@@ -1,0 +1,23 @@
+{
+  "name": "filmaffinity-scrapper",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "rm -rf plex-movies-list.json && rm -rf plex-series-list.json && node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^3.2.0",
+    "await-timeout": "^1.1.1",
+    "express": "^4.17.1",
+    "mongodb": "^3.5.7",
+    "mongoose": "^5.9.15",
+    "node-fetch": "^2.6.0",
+    "puppeteer": "^3.0.4",
+    "xml-js": "^1.6.11",
+    "xml2js": "^0.4.23"
+  }
+}
