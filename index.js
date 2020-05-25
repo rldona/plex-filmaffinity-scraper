@@ -60,7 +60,7 @@ async function createReview(type) {
   const mediaListJSON = await utils.convertXMLtoJSON(type);
 
   for (let i = 1; i < mediaListJSON.elements[0].elements.length; i++) {
-    const plexInfo = await utils.createMediaPlexInfo(mediaListJSON, i);
+    const plexInfo = utils.createMediaPlexInfo(mediaListJSON, i);
     await getReview(plexInfo);
   }
 }

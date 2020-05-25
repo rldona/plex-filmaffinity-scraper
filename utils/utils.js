@@ -22,7 +22,7 @@ exports.convertXMLtoJSON = async (type) => {
   return JSON.parse(mediaList.toString('utf8'));
 };
 
-exports.createMediaPlexInfo = async (list, index) => {
+exports.createMediaPlexInfo = (list, index) => {
   return {
     title: list.elements[0].elements[index].attributes.title || list.elements[0].elements[index].attributes.originalTitle,
     originalTitle: list.elements[0].elements[index].attributes.originalTitle || list.elements[0].elements[index].attributes.title,
