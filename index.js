@@ -35,7 +35,7 @@ async function getMovieReviewFromDetail(browser, page, url, moviePlexInfo) {
     await page.goto(url, { waitUntil: 'networkidle2' });
   }
 
-  await page.waitForSelector('#mt-content-cell');
+  await page.waitForSelector('.movie-info');
 
   const review = await utils.evaluateFilmaffinityPage(page, moviePlexInfo);
 
