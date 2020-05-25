@@ -70,8 +70,6 @@ async function getReview (term) {
   });
 
   mongodb.insert(mediaReview);
-
-  await browser.close();
 }
 
 exports.init = async () => {
