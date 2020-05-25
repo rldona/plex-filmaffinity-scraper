@@ -29,9 +29,6 @@ exports.insert = async (obj) => {
     studio: obj.studio
   });
 
-  console.log(obj.sinopsis);
-  console.log(media.sinopsis);
-
   media.save(err => {
     if (!err) {
       console.log(`Added to MongoDB: ${obj.title}`);

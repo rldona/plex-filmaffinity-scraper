@@ -1,6 +1,8 @@
 const fetch = require('node-fetch');
 const convert = require('xml-js');
 const fs = require('fs');
+const { promisify } = require('util');
+const readFileAsync = promisify(fs.readFile);
 
 exports.writeXMLtoJSON = async (type, url) => {
   let dataAsJson = {};
@@ -15,23 +17,23 @@ exports.writeXMLtoJSON = async (type, url) => {
   });
 };
 
-// exports.convertXMLtoJSON = async (type) => {
-//   const mediaList = await readFileAsync(`plex-${type}-list.json`);
-//   return JSON.parse(mediaList.toString('utf8'));
-// };
+exports.convertXMLtoJSON = async (type) => {
+  const mediaList = await readFileAsync(`plex-${type}-list.json`);
+  return JSON.parse(mediaList.toString('utf8'));
+};
 
-// exports.createMediaPlexInfo = (list, index) => {
-//   return {
-//     title: list.elements[0].elements[index].attributes.title || list.elements[0].elements[index].attributes.originalTitle,
-//     originalTitle: list.elements[0].elements[index].attributes.originalTitle || list.elements[0].elements[index].attributes.title,
-//     titleSort: list.elements[0].elements[index].attributes.titleSort || list.elements[0].elements[index].attributes.title,
-//     viewCount: parseInt(list.elements[0].elements[index].attributes.viewCount) || 0,
-//     type: list.elements[0].elements[index].attributes.type || 'movie',
-//     summary: list.elements[0].elements[index].attributes.summary || '',
-//     duration: list.elements[0].elements[index].attributes.duration || 0,
-//     studio: list.elements[0].elements[index].attributes.studio || '',
-//   }
-// };
+exports.createMediaPlexInfo = async (list, index) => {
+  return {
+    title: list.elements[0].elements[index].attributes.title || list.elements[0].elements[index].attributes.originalTitle,
+    originalTitle: list.elements[0].elements[index].attributes.originalTitle || list.elements[0].elements[index].attributes.title,
+    titleSort: list.elements[0].elements[index].attributes.titleSort || list.elements[0].elements[index].attributes.title,
+    viewCount: parseInt(list.elements[0].elements[index].attributes.viewCount) || 0,
+    type: list.elements[0].elements[index].attributes.type || 'movie',
+    summary: list.elements[0].elements[index].attributes.summary || '',
+    duration: list.elements[0].elements[index].attributes.duration || 0,
+    studio: list.elements[0].elements[index].attributes.studio || '',
+  }
+};
 
 exports.evaluateFilmaffinityPage = async (page, media) => {
   const mediaReview = await page.evaluate(() => {
