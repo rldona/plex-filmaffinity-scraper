@@ -3,6 +3,7 @@ const convert = require('xml-js');
 const fs = require('fs');
 const { promisify } = require('util');
 const readFileAsync = promisify(fs.readFile);
+const timeout = require('await-timeout');
 
 exports.writeXMLtoJSON = async (type, url) => {
   let dataAsJson = {};
@@ -36,6 +37,8 @@ exports.createMediaPlexInfo = async (list, index) => {
 };
 
 exports.evaluateFilmaffinityPage = async (page, media) => {
+  await timeout.set(3000);
+
   const mediaReview = await page.evaluate(() => {
     const movieTitle = document.querySelector('h1 span') ? document.querySelector('h1 span').textContent : '';
     const reviewDescription = document.querySelector('[itemprop="description"]') ? document.querySelector('[itemprop="description"]').textContent : '';

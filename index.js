@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const puppeteer = require('puppeteer');
+const timeout = require('await-timeout');
 const mongodb = require('./utils/mongodb');
 const utils = require('./utils/utils');
 
@@ -35,7 +36,7 @@ async function getMovieReviewFromDetail(browser, page, url, moviePlexInfo) {
     await page.goto(url, { waitUntil: 'networkidle2' });
   }
 
-  await page.waitForSelector('#mt-content-cell');
+  await timeout.set(3000);
 
   const review = await utils.evaluateFilmaffinityPage(page, moviePlexInfo);
 
