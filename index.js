@@ -95,7 +95,6 @@ exports.init = async () => {
   for (let i = 1; i < mediaList.elements[0].elements.length; i++) {
     const term = mediaList.elements[0].elements[i].attributes.titleSort || mediaList.elements[0].elements[i].attributes.originalTitle || mediaList.elements[0].elements[i].attributes.title;
     await getReview(term);
-    await timeout.set(1000);
   }
 
   mongoose.connection.close();
