@@ -20,13 +20,10 @@ async function getReview (moviePlexInfo) {
   const url = undefined;
 
   if (page.url().search('search') === -1) {
-    console.log('__Encontrado a la primera__');
     await getMovieReviewFromDetail(browser, page, url, moviePlexInfo);
   } else if (page.url().search('advsearch') !== -1) {
-    console.log('__Pelicula no encontrada__');
     await getMovieReviewFromAdvancedSearch(browser, page, moviePlexInfo);
   } else {
-    console.log('__Encontrado en busqueda avanzada__');
     await getMovieReviewFromSearch(browser, page, moviePlexInfo);
   }
 }

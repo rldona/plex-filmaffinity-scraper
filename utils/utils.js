@@ -83,8 +83,5 @@ exports.evaluateFilmaffinityPage = async (page, media) => {
   mediaReview.duration = media.duration;
   mediaReview.studio = media.studio;
 
-  console.log(mediaReview.title);
-  console.log(mediaReview.sinopsis);
-
   return mediaReview;
 }
