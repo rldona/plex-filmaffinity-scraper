@@ -7,6 +7,7 @@ const utils = require('./utils/utils');
 async function getReview (term) {
   const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
   const page = await browser.newPage();
+
   const searchTerm = term;
 
   page.setDefaultNavigationTimeout(0);
@@ -31,7 +32,7 @@ async function getReview (term) {
     console.log('\n__Busqueda normal__\n');
   }
 
-  await page.waitFor('#mt-content-cell');
+  await page.waitFor('h1 span');
 
   const mediaReview = await page.evaluate(() => {
     const movieTitle = document.querySelector('h1 span') ? document.querySelector('h1 span').textContent : '';
@@ -92,7 +93,8 @@ exports.init = async () => {
   const mediaList = await utils.convertXMLtoJSON(TYPE);
 
   for (let i = 1; i < mediaList.elements[0].elements.length; i++) {
-    await getReview(mediaList.elements[0].elements[i].attributes.title);
+    const term = mediaList.elements[0].elements[i].attributes.titleSort || mediaList.elements[0].elements[i].attributes.originalTitle || mediaList.elements[0].elements[i].attributes.title;
+    await getReview(term);
     await timeout.set(1000);
   }
 
