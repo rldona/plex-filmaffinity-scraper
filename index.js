@@ -4,13 +4,12 @@ const mongodb = require('./utils/mongodb');
 const utils = require('./utils/utils');
 
 async function getReview (moviePlexInfo) {
+  const searchTerm = moviePlexInfo.titleSort;
   const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
   const page = await browser.newPage();
 
-  const searchTerm = moviePlexInfo.titleSort;
-
+  await page.setDefaultNavigationTimeout(0);
   await page.goto('https://www.filmaffinity.com/es/main.html', { waitUntil: 'networkidle2' });
-
   await page.waitFor('#top-search-input');
   await page.$eval('#top-search-input', (el, searchTerm) => el.value = searchTerm, searchTerm);
   await page.click('input[type="submit"]');
@@ -65,8 +64,8 @@ async function createReview(type) {
   }
 }
 
-exports.init = async () => {
-  const TYPE = 'movies';
+exports.init = async (type) => {
+  const TYPE = type;
 
   let plexURL;
 
