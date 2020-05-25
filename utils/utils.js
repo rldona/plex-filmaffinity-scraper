@@ -36,7 +36,7 @@ exports.createMediaPlexInfo = async (list, index) => {
   }
 };
 
-exports.evaluateFilmaffinityPage = async (page, media) => {
+exports.evaluateFilmaffinityPage = async (page) => {
   const mediaReview = await page.evaluate(() => {
     const movieTitle = document.querySelector('h1 span') ? document.querySelector('h1 span').textContent : '';
     const reviewDescription = document.querySelector('[itemprop="description"]') ? document.querySelector('[itemprop="description"]').textContent : '';
@@ -72,14 +72,14 @@ exports.evaluateFilmaffinityPage = async (page, media) => {
     }
   });
 
-  mediaReview.title = media.title;
-  mediaReview.originalTitle = media.originalTitle;
-  mediaReview.titleSort = media.titleSort;
-  mediaReview.viewCount = media.viewCount;
-  mediaReview.type = media.type;
-  mediaReview.summary = media.summary;
-  mediaReview.duration = media.duration;
-  mediaReview.studio = media.studio;
+  // mediaReview.title = media.title;
+  // mediaReview.originalTitle = media.originalTitle;
+  // mediaReview.titleSort = media.titleSort;
+  // mediaReview.viewCount = media.viewCount;
+  // mediaReview.type = media.type;
+  // mediaReview.summary = media.summary;
+  // mediaReview.duration = media.duration;
+  // mediaReview.studio = media.studio;
 
   return mediaReview;
 }
