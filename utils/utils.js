@@ -36,8 +36,6 @@ exports.createMediaPlexInfo = async (list, index) => {
 };
 
 exports.evaluateFilmaffinityPage = async (page, media) => {
-  await page.waitFor('#left-column');
-
   const mediaReview = await page.evaluate(() => {
     const movieTitle = document.querySelector('h1 span') ? document.querySelector('h1 span').textContent : '';
     const reviewDescription = document.querySelector('[itemprop="description"]') ? document.querySelector('[itemprop="description"]').textContent : '';
