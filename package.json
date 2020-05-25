@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "scrapping-movies": "rm -rf plex-movies-list.json && rm -rf plex-series-list.json && node server.js type=movies",
-    "scrapping-series": "rm -rf plex-series-list.json && rm -rf plex-series-list.json && node server.js type=series",
+    "start": "rm -rf plex-movies-list.json && node server.js",
+    "scrapping-movies": "rm -rf plex-movies-list.json && node server.js type=movies",
+    "scrapping-series": "rm -rf plex-series-list.json && node server.js type=series",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

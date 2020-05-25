@@ -36,6 +36,8 @@ exports.createMediaPlexInfo = async (list, index) => {
 };
 
 exports.evaluateFilmaffinityPage = async (page, media) => {
+  await page.waitFor('#mt-content-cell');
+
   const mediaReview = await page.evaluate(() => {
     const movieTitle = document.querySelector('h1 span') ? document.querySelector('h1 span').textContent : '';
     const reviewDescription = document.querySelector('[itemprop="description"]') ? document.querySelector('[itemprop="description"]').textContent : '';
@@ -80,7 +82,8 @@ exports.evaluateFilmaffinityPage = async (page, media) => {
   mediaReview.duration = media.duration;
   mediaReview.studio = media.studio;
 
-  console.log(mediaReview);
+  console.log(mediaReview.title);
+  console.log(mediaReview.sinopsis);
 
   return mediaReview;
 }

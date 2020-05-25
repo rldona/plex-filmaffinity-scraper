@@ -9,7 +9,9 @@ async function getReview (moviePlexInfo) {
   const page = await browser.newPage();
 
   await page.setDefaultNavigationTimeout(0);
+
   await page.goto('https://www.filmaffinity.com/es/main.html', { waitUntil: 'networkidle2' });
+
   await page.waitFor('#top-search-input');
   await page.$eval('#top-search-input', (el, searchTerm) => el.value = searchTerm, searchTerm);
   await page.click('input[type="submit"]');
@@ -17,10 +19,13 @@ async function getReview (moviePlexInfo) {
   const url = undefined;
 
   if (page.url().search('search') === -1) {
+    console.log('__Encontrado a la primera__');
     await getMovieReviewFromDetail(browser, page, url, moviePlexInfo);
   } else if (page.url().search('advsearch') !== -1) {
+    console.log('__Pelicula no encontrada__');
     await getMovieReviewFromAdvancedSearch(browser, page, moviePlexInfo);
   } else {
+    console.log('__Encontrado en busqueda avanzada__');
     await getMovieReviewFromSearch(browser, page, moviePlexInfo);
   }
 }
@@ -40,12 +45,14 @@ async function getMovieReviewFromDetail(browser, page, url, moviePlexInfo) {
 }
 
 async function getMovieReviewFromSearch(browser, page, moviePlexInfo) {
-  await page.waitForSelector('.z-search');
+  await page.waitForSelector('.se-it');
 
   const searchPage = await page.evaluate(() => {
     const searchSeList = document.querySelector('.z-search > .se-it .mc-poster > a[href]').outerHTML.split('"')[3].toString();
     return searchSeList;
   });
+
+  console.log(searchPage);
 
   await getMovieReviewFromDetail(browser, page, searchPage, moviePlexInfo);
 }
@@ -64,8 +71,8 @@ async function createReview(type) {
   }
 }
 
-exports.init = async (type) => {
-  const TYPE = type;
+exports.init = async () => {
+  const TYPE = 'movies';
 
   let plexURL;
 
