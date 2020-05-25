@@ -32,7 +32,7 @@ async function getReview (term) {
     console.log('\n__Busqueda normal__\n');
   }
 
-  await page.waitFor('h1 span');
+  await page.waitFor('#mt-content-cell');
 
   const mediaReview = await page.evaluate(() => {
     const movieTitle = document.querySelector('h1 span') ? document.querySelector('h1 span').textContent : '';
