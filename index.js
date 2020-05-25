@@ -4,18 +4,16 @@ const timeout = require('await-timeout');
 const mongodb = require('./utils/mongodb');
 const utils = require('./utils/utils');
 
-async function getReview (term) {
+async function getReview (term, viewCount, type, duration, studio) {
   const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
   const page = await browser.newPage();
-
-  const searchTerm = term;
 
   page.setDefaultNavigationTimeout(0);
 
   await page.goto('https://www.filmaffinity.com/es/main.html', { waitUntil: 'networkidle2' });
 
   await page.waitFor('#top-search-input');
-  await page.$eval('#top-search-input', (el, searchTerm) => el.value = searchTerm, searchTerm);
+  await page.$eval('#top-search-input', (el, searchTerm) => el.value = searchTerm, term);
   await page.click('input[type="submit"]');
 
   if (page.url().search('search.php') !== -1) {
@@ -69,7 +67,14 @@ async function getReview (term) {
     }
   });
 
+  mediaReview.viewCount = viewCount;
+  mediaReview.type = type;
+  mediaReview.duration = duration;
+  mediaReview.studio = studio;
+
   mongodb.insert(mediaReview);
+
+  await browser.close();
 }
 
 exports.init = async () => {
@@ -92,7 +97,12 @@ exports.init = async () => {
 
   for (let i = 1; i < mediaList.elements[0].elements.length; i++) {
     const term = mediaList.elements[0].elements[i].attributes.titleSort || mediaList.elements[0].elements[i].attributes.originalTitle || mediaList.elements[0].elements[i].attributes.title;
-    await getReview(term);
+    const viewCount = parseInt(mediaList.elements[0].elements[i].attributes.viewCount) || 0;
+    const type = mediaList.elements[0].elements[i].attributes.type || 'movie';
+    const duration = mediaList.elements[0].elements[i].attributes.duration || 0;
+    const studio = mediaList.elements[0].elements[i].attributes.studio || '';
+
+    await getReview(term, viewCount, type, duration, studio);
   }
 
   mongoose.connection.close();

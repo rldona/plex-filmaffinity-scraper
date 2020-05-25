@@ -16,19 +16,10 @@ var mediaSchema = new mongoose.Schema({
     ratingCount: {
       type: String,
     },
-    originalTitle: {
-      type: String,
-    },
-    titleSort: {
-      type: String,
-    },
     viewCount: {
       type: Number,
     },
     type: {
-      type: String,
-    },
-    summary: {
       type: String,
     },
     duration: {
