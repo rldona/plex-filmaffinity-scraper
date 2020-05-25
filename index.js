@@ -3,6 +3,10 @@ const puppeteer = require('puppeteer');
 const mongodb = require('./utils/mongodb');
 const utils = require('./utils/utils');
 
+const fs = require('fs');
+const { promisify } = require('util');
+const readFileAsync = promisify(fs.readFile);
+
 async function getReview (moviePlexInfo) {
   const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
   const page = await browser.newPage();
@@ -44,8 +48,7 @@ async function getMovieReviewFromSearch(browser, page, moviePlexInfo) {
   await page.waitForSelector('.z-search');
 
   const searchPage = await page.evaluate(() => {
-    const searchSeList = document.querySelector('.z-search > .se-it .mc-poster > a[href]').outerHTML.split('"')[3].toString();
-    return searchSeList;
+    return document.querySelector('.z-search > .se-it .mc-poster > a[href]').outerHTML.split('"')[3].toString();
   });
 
   await getMovieReviewFromDetail(browser, page, searchPage, moviePlexInfo);
@@ -57,10 +60,20 @@ async function getMovieReviewFromAdvancedSearch(browser, page) {
 }
 
 async function createReview(type) {
-  const mediaListJSON = await utils.convertXMLtoJSON(type);
+  const mediaList = await readFileAsync(`plex-${type}-list.json`);
+  const mediaListJSON = JSON.parse(mediaList.toString('utf8'));
 
   for (let i = 1; i < mediaListJSON.elements[0].elements.length; i++) {
-    const plexInfo = utils.createMediaPlexInfo(mediaListJSON, i);
+    const plexInfo = {
+      title: mediaListJSON.elements[0].elements[i].attributes.title || mediaListJSON.elements[0].elements[i].attributes.originalTitle,
+      originalTitle: mediaListJSON.elements[0].elements[i].attributes.originalTitle || mediaListJSON.elements[0].elements[i].attributes.title,
+      titleSort: mediaListJSON.elements[0].elements[i].attributes.titleSort || mediaListJSON.elements[0].elements[i].attributes.title,
+      viewCount: parseInt(mediaListJSON.elements[0].elements[i].attributes.viewCount) || 0,
+      type: mediaListJSON.elements[0].elements[i].attributes.type || 'movie',
+      summary: mediaListJSON.elements[0].elements[i].attributes.summary || '',
+      duration: mediaListJSON.elements[0].elements[i].attributes.duration || 0,
+      studio: mediaListJSON.elements[0].elements[i].attributes.studio || '',
+    }
     await getReview(plexInfo);
   }
 }
